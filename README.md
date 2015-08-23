@@ -8,7 +8,7 @@ Each hexagram can therefore be easily used to encode a number up to 6bits of ent
 ## Conventions
 
 Each I Ching character represents a 6 bit value, strings are ordered with the most significant 6 bits of the number first. Withing a I Ching character the top line represents the most significant bit of the sextet.
-The unbroken line (Yand) corresponds to 0, the broken line corresponds to 1. We do not use the King Wen sequence.
+The unbroken line (Yang) corresponds to 0, the broken line (Yin) corresponds to 1. We do not use the King Wen sequence.
 
 ## Example
 
