@@ -13,7 +13,7 @@ func usage() {
 	os.Exit(1)
 }
 
-func printLine(addr int, buf []byte, sz int, wr io.Writer) {
+func printLine(addr int, buf []byte, sz int, wr io.Writer, end int) {
 	_, err := io.WriteString(wr, iching.SpacePad(iching.Itoiching(uint64(addr)), sz))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error on output: %v\n", err)
@@ -22,18 +22,27 @@ func printLine(addr int, buf []byte, sz int, wr io.Writer) {
 	io.WriteString(wr, " ")
 	for i := 0; i < len(buf); i += 2 {
 		n := uint64(buf[i])<<8 + uint64(buf[i+1])
-		ich := iching.QianPad(iching.Itoiching(n), 3)
 		if i == 8 {
 			io.WriteString(wr, " ")
 		}
-		fmt.Fprintf(wr, " %s", ich)
+
+		if i >= end {
+			fmt.Fprintf(wr, "    ")
+		} else {
+			ich := iching.QianPad(iching.Itoiching(n), 3)
+			fmt.Fprintf(wr, " %s", ich)
+		}
 	}
 	io.WriteString(wr, "  |")
 	for i := 0; i < len(buf); i++ {
-		if buf[i] >= 0x20 && buf[i] <= 0x7e {
-			fmt.Fprintf(wr, "%c", buf[i])
+		if i >= end {
+			fmt.Fprintf(wr, " ")
 		} else {
-			io.WriteString(wr, ".")
+			if buf[i] >= 0x20 && buf[i] <= 0x7e {
+				fmt.Fprintf(wr, "%c", buf[i])
+			} else {
+				io.WriteString(wr, ".")
+			}
 		}
 	}
 	io.WriteString(wr, "|\n")
@@ -60,6 +69,7 @@ func main() {
 
 	rd := bufio.NewReader(fh)
 	wr := bufio.NewWriter(os.Stdout)
+	defer wr.Flush()
 
 	buf := make([]byte, 16)
 	i := 0
@@ -71,7 +81,7 @@ func main() {
 		}
 
 		if n > 0 {
-			printLine(i, buf, sz, wr)
+			printLine(i, buf, sz, wr, n)
 			i += n
 		}
 
