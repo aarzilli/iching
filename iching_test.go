@@ -38,5 +38,4 @@ func TestPadding(t *testing.T) {
 	if len([]rune(ichp)) != 3 {
 		t.Fatalf("bad padding %s\n", ichp)
 	}
-
 }
