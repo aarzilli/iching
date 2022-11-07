@@ -39,3 +39,12 @@ func TestPadding(t *testing.T) {
 		t.Fatalf("bad padding %s\n", ichp)
 	}
 }
+
+func FuzzIchingtoi(f *testing.F) {
+	for i := 0; i < 100; i++ {
+		f.Add(Itoiching(uint64(i)))
+	}
+	f.Fuzz(func(t *testing.T, in string) {
+		Ichingtoi(in)
+	})
+}

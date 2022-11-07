@@ -40,7 +40,7 @@ func Ichingtoi(in string) (uint64, error) {
 	r := uint64(0)
 	for _, ch := range []rune(in) {
 		idx := int(ch - 19904)
-		if idx < 0 || idx > len(invtable) {
+		if idx < 0 || idx >= len(invtable) {
 			return 0, &strconv.NumError{"iching.Ichingtoi", in, strconv.ErrSyntax}
 		}
 		r = r << 6
